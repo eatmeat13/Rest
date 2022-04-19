@@ -12,22 +12,22 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
 @Transactional
 public class UserService implements UserDetailsService {
 
+
     private final UserRepository userRepository;
 
     private final RoleRepository roleRepository;
 
     private final PasswordEncoder passwordEncoder;
-    @Autowired
 
+
+    @Autowired
     public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -36,8 +36,8 @@ public class UserService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
@@ -53,13 +53,10 @@ public class UserService implements UserDetailsService {
 
 
     public boolean save(User user) {
-        User userBD = userRepository.findByUsername(user.getUsername());
+        User userBD = userRepository.findByEmail(user.getUsername());
         if (userBD != null) {
             return false;
         }
-        Role role = new Role();
-        role.setName("ROLE_ADMIN");
-        user.setRoles(Collections.singleton(role));
         user.setPassword((passwordEncoder.encode(user.getPassword())));
         userRepository.save(user);
         return true;
@@ -74,19 +71,23 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public void  update(User user) {
-        userRepository.update(user.getUsername(), passwordEncoder.encode(user.getPassword()), user.getId());
+    public List<Role> allRoles() {
+        return roleRepository.findAll();
 
     }
 
-    public User findByName(String username) {
-        return userRepository.findByUsername(username);
+    public void update(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+
     }
 
 
-
-
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 }
+
 
 
 

@@ -1,11 +1,11 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 
@@ -22,11 +22,10 @@ public class UserController {
     @GetMapping()
     public String getUser(Model model, Authentication authentication) {
         String username = authentication.getName();
-        model.addAttribute("user", userService.findByName(username));
+        model.addAttribute("user", userService.findByEmail(username));
         return "user";
     }
-    }
-
+}
 
 
 

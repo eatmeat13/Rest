@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-
 @Controller
 @RequestMapping("/registration")
 public class RegistrationController {
@@ -21,7 +20,6 @@ public class RegistrationController {
     public RegistrationController(UserService userService) {
         this.userService = userService;
     }
-
 
 
     @GetMapping
