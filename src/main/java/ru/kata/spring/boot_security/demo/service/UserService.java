@@ -21,8 +21,7 @@ import java.util.*;
 @Service
 @Transactional
 public class UserService implements UserDetailsService {
-    @PersistenceContext
-    private EntityManager em;
+
 
     private final UserRepository userRepository;
 
